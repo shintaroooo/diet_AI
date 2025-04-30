@@ -1,6 +1,6 @@
 import streamlit as st
 import datetime
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 # Streamlitの設定 (set_page_configは最初に呼び出す必要があります)
 st.set_page_config(page_title="ダイエットサポートAI", layout="wide")
