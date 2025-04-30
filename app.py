@@ -9,10 +9,10 @@ from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder, HumanMess
 # Removed unused import: StreamlitCallbackHandler
 from dotenv import load_dotenv
 import os
-import matplotlib.pyplot as plt
+# Removed unused import: matplotlib.pyplot as plt
 from langchain.prompts import PromptTemplate
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
-from langchain.chains import LLMChain, ConversationChain
+from langchain.chains import LLMChain
 import pytz
 import re
 
@@ -333,6 +333,9 @@ trainer_prompt_template = PromptTemplate(
     )
 )
 
+# LLMChainの設定
+trainer_llm_chain = LLMChain(llm=llm, prompt=trainer_prompt_template)
+
 # サイドバーにプロのトレーナーとの対話型AIを追加
 st.sidebar.header("🤖 プロのトレーナーAIに相談")
 if "trainer_ai_history" not in st.session_state:
@@ -351,10 +354,7 @@ if st.sidebar.button("相談する", key="trainer_ai_button"):
         )
         
         # プロンプトを生成
-        prompt = trainer_prompt_template.format(history=history, user_input=user_question)
-        
-        # LLMにプロンプトを渡して応答を取得
-        trainer_response = llm.predict(prompt)
+        trainer_response = trainer_llm_chain.run({"history": history, "user_input": user_question})
         
         # 会話履歴にAIの応答を追加
         st.session_state.trainer_ai_history.append({"role": "assistant", "content": trainer_response})
